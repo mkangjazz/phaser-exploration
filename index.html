@@ -14,5 +14,28 @@
   <body>
     <p>Testing phaser framework!</p>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.24.1/dist/phaser.min.js"></script>
+    <script>
+      var config = {
+          height: 600,
+          width: 800,
+          scene: {
+              preload: preload,
+              create: create,
+              update: update
+          },
+          type: Phaser.AUTO,
+      };
+
+      var game = new Phaser.Game(config);
+
+      function preload (){
+      }
+
+      function create (){
+      }
+
+      function update (){
+      }
+    </script>
   </body>
 </html>
