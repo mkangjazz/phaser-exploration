@@ -1,15 +1,19 @@
 import Phaser from "phaser";
 
+import getRandomInt from '../../utility/getRandomInt';
+
 export default function circle(that){
-  var isSelected = false;      
-  var shapeX = 400;
-  var shapeY = 50;
+  var inventory = that.children.getByName('inventory');
+
+  var shapeRadius = 40;
+  var shapeX = getRandomInt(0 + shapeRadius, game.config.width - shapeRadius);
+  var shapeY = getRandomInt(0 + shapeRadius, game.config.height  - inventory.height - shapeRadius);
   var shapeColor = 0x9f00d0;
 
   var shape = that.add.circle(
     shapeX,
     shapeY,
-    40,
+    shapeRadius,
     shapeColor,
   );
 
@@ -35,26 +39,20 @@ export default function circle(that){
   });
 
   shape.on('pointerup', function(){
-    shape.setActive(true);
-    shape.setVisible(false);
-
     var inventory_circle = that.children.getByName('inventory_circle');
 
-    inventory_circle.setActive(true);
-    inventory_circle.fillColor = shapeColor;
+    if (shape.fillColor === inventory_circle.fillColor) {
+      shape.setActive(true);
+      shape.setVisible(false);
+
+      inventory_circle.setActive(true);
+//      inventory_circle.fillColor = shapeColor;        
+    }
   });
 
-  shape.on('pointerover', function () {
-    var newColor = new Phaser.Display.Color();
-    
-    shapeColor = newColor.random(50).color;
+  shape.on('pointerout', function () {
+    var colors = that._globalData.colors;
 
-//  shape.input.cursor = 'pointer';
-    shape.fillColor = shapeColor;
+    shape.fillColor = colors[getRandomInt(0, colors.length - 1)];
   });
-
-//  shape.on('pointerout', function () {
-//    shape.fillColor = shapeColor;
-//  });
-
 }

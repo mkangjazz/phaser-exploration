@@ -9,7 +9,7 @@ window.game = window.game || (function() {
     height: 400,
     type: Phaser.AUTO,
     parent: "app",
-    width: 800,
+    width: 600,
     scene: [
       sceneMain,
     ],
