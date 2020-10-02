@@ -21,17 +21,11 @@ export default function rectangle(that){
   shape.name = 'item_rectangle';
   
   shape.setActive(false);
-  
-  var geom = new Phaser.Geom.Circle(
-    0 + shape.radius,
-    0 + shape.radius,
-    shape.radius,
-  );
 
   shape.setInteractive({
-    hitArea: geom,
-    hitAreaCallback: geom.Contains,
-    draggable: false,
+    hitArea: shape,
+    hitAreaCallback: shape.Contains,
+    draggable: true,
     dropZone: false,
     useHandCursor: false,
     cursor: '',
@@ -39,26 +33,75 @@ export default function rectangle(that){
     alphaTolerance: 1,
   });
 
-//  shape.on('pointerup', function(){
-//    shape.setActive(true);
-//    shape.setVisible(false);
-//
-//    var inventory_circle = that.children.getByName('inventory_circle');
-//
-//    inventory_circle.setActive(true);
-//    inventory_circle.fillColor = shapeColor;
-//  });
-//
-//  shape.on('pointerover', function () {
-//    var newColor = new Phaser.Display.Color();
-//    
-//    shapeColor = newColor.random(50).color;
-//
-////  shape.input.cursor = 'pointer';
-//    shape.fillColor = shapeColor;
-//  });
+  var startDragX = 0;
+  var startDragY = 0;
+  var endDragX = 0;
+  var endDragY = 0;
+  
+  var lastTime = 0;
+  
+  shape.on('pointerdown', function(){
+    var inventory_triangle = that.children.getByName('inventory_triangle');
+    var clickDelay = that.time.now - lastTime;
+    
+    lastTime = that.time.now;
 
-//  shape.on('pointerout', function () {
-//    shape.fillColor = shapeColor;
-//  });
+    if (clickDelay < 750) {
+      if (shape.fillColor === inventory_triangle.fillColor) {
+        shape.setActive(true);
+        shape.setVisible(false);
+
+        inventory_triangle.setActive(true);
+      }
+    }
+  });
+
+  shape.on(
+    'dragstart',
+    function (pointer) {
+      startDragX = pointer.downX;
+      startDragY = pointer.downY;
+    }
+  );
+
+  shape.on(
+    'drag',
+    function(pointer, x, y) {
+      this.x = x;
+      this.y = y;
+    }
+  );
+
+  shape.on(
+    'dragend',
+    function (pointer) {
+      endDragX = pointer.upX;
+      endDragY = pointer.upY;
+      
+      if (this.x - shapeLength / 2 < 0) {
+        this.x = shapeLength / 2;
+      }
+      
+      if (this.x + shapeLength / 2 > that.game.config.width) {
+        this.x = that.game.config.width - shapeLength / 2;
+      }
+
+      if (this.y - shapeLength / 2 < 0) {
+        this.y = shapeLength / 2;
+      }
+      
+      if (this.y + shapeLength / 2 > that.game.config.height - 75) {
+        this.y = that.game.config.height - 75 - shapeLength / 2;
+      }
+
+      if (
+        Math.abs(endDragX - startDragX) > 50 || 
+        Math.abs(endDragY - startDragY) > 50
+      ) {
+        var colors = that._globalData.colors;
+
+        shape.fillColor = colors[getRandomInt(0, colors.length)]; 
+      }
+    }
+  );
 }

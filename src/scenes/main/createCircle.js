@@ -19,17 +19,11 @@ export default function circle(that){
 
   shape.name = 'item_circle';
   
-  shape.setActive(false);
-  
-  var geom = new Phaser.Geom.Circle(
-    0 + shape.radius,
-    0 + shape.radius,
-    shape.radius,
-  );
+  shape.setActive(false);  
 
   shape.setInteractive({
-    hitArea: geom,
-    hitAreaCallback: geom.Contains,
+    hitArea: shape,
+    hitAreaCallback: shape.Contains,
     draggable: false,
     dropZone: false,
     useHandCursor: false,
@@ -46,13 +40,12 @@ export default function circle(that){
       shape.setVisible(false);
 
       inventory_circle.setActive(true);
-//      inventory_circle.fillColor = shapeColor;        
     }
   });
 
   shape.on('pointerout', function () {
     var colors = that._globalData.colors;
 
-    shape.fillColor = colors[getRandomInt(0, colors.length - 1)];
+    shape.fillColor = colors[getRandomInt(0, colors.length)];
   });
 }

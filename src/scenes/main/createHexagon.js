@@ -30,44 +30,63 @@ export default function rectangle(that){
   shape.name = 'item_hexagon';
   
   shape.setActive(false);
-  
-//  var geom = new Phaser.Geom.Circle(
-//    0 + shape.radius,
-//    0 + shape.radius,
-//    shape.radius,
-//  );
-//
-//  shape.setInteractive({
-//    hitArea: geom,
-//    hitAreaCallback: geom.Contains,
-//    draggable: false,
-//    dropZone: false,
-//    useHandCursor: false,
-//    cursor: '',
-//    pixelPerfect: false,
-//    alphaTolerance: 1,
-//  });
-//
-//  shape.on('pointerup', function(){
-//    shape.setActive(true);
-//    shape.setVisible(false);
-//
-//    var inventory_circle = that.children.getByName('inventory_circle');
-//
-//    inventory_circle.setActive(true);
-//    inventory_circle.fillColor = shapeColor;
-//  });
-//
-//  shape.on('pointerover', function () {
-//    var newColor = new Phaser.Display.Color();
-//    
-//    shapeColor = newColor.random(50).color;
-//
-////  shape.input.cursor = 'pointer';
-//    shape.fillColor = shapeColor;
-//  });
 
-//  shape.on('pointerout', function () {
-//    shape.fillColor = shapeColor;
-//  });
+  shape.setInteractive({
+    hitArea: shape,
+    hitAreaCallback: shape.Contains,
+    draggable: true,
+    dropZone: false,
+    useHandCursor: false,
+    cursor: '',
+    pixelPerfect: false,
+    alphaTolerance: 1,
+  });
+  
+  var startAngle = 0;
+
+  shape.on('dragstart', function(pointer){
+    startAngle = Math.abs(shape.rotation * 180 / Math.PI);
+  });
+
+  shape.on('drag', function(pointer, x, y){
+    var angle = Phaser.Math.Angle.Between(
+      shape.x,
+      shape.y,
+      x,
+      y
+    );
+
+    var angleDegrees = angle * 180 / Math.PI;
+    var rotationDelta = Math.floor(Math.abs(startAngle - angleDegrees));
+
+    if (
+      rotationDelta === 90 ||
+      rotationDelta === 180 ||
+      rotationDelta === -90 ||
+      rotationDelta === 180
+    ) {
+      var colors = that._globalData.colors;
+      shape.fillColor = colors[getRandomInt(0, colors.length)];
+    }
+
+    shape.setRotation(angle + Math.PI / 2);
+  });
+  
+  var lastTime = 0;
+  
+  shape.on('pointerdown', function(){
+    var inventory_hexagon = that.children.getByName('inventory_hexagon');
+    var clickDelay = that.time.now - lastTime;
+    
+    lastTime = that.time.now;
+
+    if (clickDelay < 750) {
+      if (shape.fillColor === inventory_hexagon.fillColor) {
+        shape.setActive(true);
+        shape.setVisible(false);
+
+        inventory_hexagon.setActive(true);
+      }
+    }
+  });
 }

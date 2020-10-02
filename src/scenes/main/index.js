@@ -33,6 +33,8 @@ scene._globalData = {
     0xFFFF00,
     0x0000FF,
   ],
+  item_positions: [
+  ],
 }
 
 export default scene;

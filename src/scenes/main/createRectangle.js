@@ -21,16 +21,10 @@ export default function rectangle(that){
   shape.name = 'item_rectangle';
   
   shape.setActive(false);
-  
-  var geom = new Phaser.Geom.Circle(
-    0 + shape.radius,
-    0 + shape.radius,
-    shape.radius,
-  );
 
   shape.setInteractive({
-    hitArea: geom,
-    hitAreaCallback: geom.Contains,
+    hitArea: shape,
+    hitAreaCallback: shape.Contains,
     draggable: false,
     dropZone: false,
     useHandCursor: false,
@@ -50,7 +44,7 @@ export default function rectangle(that){
     if (clickDelay < 750) {
       var colors = that._globalData.colors;
 
-      shape.fillColor = colors[getRandomInt(0, colors.length - 1)];
+      shape.fillColor = colors[getRandomInt(0, colors.length)];
     } else {
       // single-click
 
@@ -64,17 +58,4 @@ export default function rectangle(that){
       }
     }
   });
-//
-//  shape.on('pointerover', function () {
-//    var newColor = new Phaser.Display.Color();
-//    
-//    shapeColor = newColor.random(50).color;
-//
-////  shape.input.cursor = 'pointer';
-//    shape.fillColor = shapeColor;
-//  });
-
-//  shape.on('pointerout', function () {
-//    shape.fillColor = shapeColor;
-//  });
 }
