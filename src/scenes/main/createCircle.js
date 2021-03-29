@@ -3,11 +3,12 @@ import Phaser from "phaser";
 import getRandomInt from '../../utility/getRandomInt';
 
 export default function circle(that){
-  var inventory = that.children.getByName('inventory');
+  var shapeRadius = that._globalData.shapeRadius;
 
-  var shapeRadius = 40;
-  var shapeX = getRandomInt(0 + shapeRadius, game.config.width - shapeRadius);
-  var shapeY = getRandomInt(0 + shapeRadius, game.config.height  - inventory.height - shapeRadius);
+  var uniqueCoordinates = that._globalData.getUniqueShapeCoordinates();
+  var shapeX = uniqueCoordinates.x;
+  var shapeY = uniqueCoordinates.y;
+
   var shapeColor = 0x9f00d0;
 
   var shape = that.add.circle(
@@ -44,8 +45,6 @@ export default function circle(that){
   });
 
   shape.on('pointerout', function () {
-    var colors = that._globalData.colors;
-
-    shape.fillColor = colors[getRandomInt(0, colors.length)];
+    shape.fillColor = that._globalData.getAnyColorExceptThisOne(shape.fillColor);
   });
 }

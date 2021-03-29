@@ -2,15 +2,14 @@ import Phaser from "phaser";
 
 import getRandomInt from '../../utility/getRandomInt';
 
-export default function rectangle(that){
-  var inventory = that.children.getByName('inventory');
-  
-  var shapeLength = 80;
-  var shapeX = getRandomInt(0 + shapeLength, game.config.width - shapeLength);
-  var shapeY = getRandomInt(0 + shapeLength, game.config.height  - inventory.height - shapeLength);
+export default function rectangle(that){  
+  var uniqueCoordinates = that._globalData.getUniqueShapeCoordinates();
+  var shapeX = uniqueCoordinates.x;
+  var shapeY = uniqueCoordinates.y;
+
   var shapeColor = 0x9f00d0;
 
-  var hypotenuse = 40;
+  var hypotenuse = that._globalData.shapeRadius;
   var polyY = Math.abs(hypotenuse * Math.sin(60 * Math.PI/180));
   var polyX = Math.abs(hypotenuse * Math.sin(30 * Math.PI/180));
 
@@ -65,8 +64,7 @@ export default function rectangle(that){
       rotationDelta === -90 ||
       rotationDelta === 180
     ) {
-      var colors = that._globalData.colors;
-      shape.fillColor = colors[getRandomInt(0, colors.length)];
+      shape.fillColor = that._globalData.getAnyColorExceptThisOne(shape.fillColor);
     }
 
     shape.setRotation(angle + Math.PI / 2);

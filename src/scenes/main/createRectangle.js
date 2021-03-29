@@ -3,11 +3,12 @@ import Phaser from "phaser";
 import getRandomInt from '../../utility/getRandomInt';
 
 export default function rectangle(that){
-  var inventory = that.children.getByName('inventory');
-  
-  var shapeLength = 70;
-  var shapeX = getRandomInt(0 + shapeLength, game.config.width - shapeLength);
-  var shapeY = getRandomInt(0 + shapeLength, game.config.height  - inventory.height - shapeLength);
+  var shapeLength = that._globalData.shapeRadius + 30;
+
+  var uniqueCoordinates = that._globalData.getUniqueShapeCoordinates();
+  var shapeX = uniqueCoordinates.x;
+  var shapeY = uniqueCoordinates.y;
+
   var shapeColor = 0x9f00d0;
 
   var shape = that.add.rectangle(
@@ -42,9 +43,7 @@ export default function rectangle(that){
     lastTime = that.time.now;
 
     if (clickDelay < 750) {
-      var colors = that._globalData.colors;
-
-      shape.fillColor = colors[getRandomInt(0, colors.length)];
+      shape.fillColor = that._globalData.getAnyColorExceptThisOne(shape.fillColor);
     } else {
       // single-click
 

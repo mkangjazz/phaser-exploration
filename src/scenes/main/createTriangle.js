@@ -3,11 +3,12 @@ import Phaser from "phaser";
 import getRandomInt from '../../utility/getRandomInt';
 
 export default function rectangle(that){
-  var inventory = that.children.getByName('inventory');
- 
-  var shapeLength = 80;
-  var shapeX = getRandomInt(0 + shapeLength, game.config.width - shapeLength);
-  var shapeY = getRandomInt(0 + shapeLength, game.config.height  - inventory.height - shapeLength);
+  var shapeLength = that._globalData.shapeRadius * 2;
+
+  var uniqueCoordinates = that._globalData.getUniqueShapeCoordinates();
+  var shapeX = uniqueCoordinates.x;
+  var shapeY = uniqueCoordinates.y;
+
   var shapeColor = 0x9f00d0;
 
   var shape = that.add.triangle(
@@ -98,9 +99,7 @@ export default function rectangle(that){
         Math.abs(endDragX - startDragX) > 50 || 
         Math.abs(endDragY - startDragY) > 50
       ) {
-        var colors = that._globalData.colors;
-
-        shape.fillColor = colors[getRandomInt(0, colors.length)]; 
+        shape.fillColor = that._globalData.getAnyColorExceptThisOne(shape.fillColor);
       }
     }
   );

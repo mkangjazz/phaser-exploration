@@ -9,12 +9,6 @@ export default function createInventory(that){
       that._globalData.colors[0],
     );
 
-    var geom = new Phaser.Geom.Circle(
-      shape.radius,
-      shape.radius,
-      shape.radius,
-    );
-
     shape.name = 'inventory_circle';
     
     shape.setActive(false);
@@ -67,7 +61,7 @@ export default function createInventory(that){
   }
   
 	var width = that.game.config.width;
-	var height = 75;
+	var height = that._globalData.inventoryHeight;
 	var x = width / 2;
 	var y = that.game.config.height - height / 2;
 
