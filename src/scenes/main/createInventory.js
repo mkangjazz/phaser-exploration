@@ -6,7 +6,7 @@ export default function createInventory(that){
       gridWidth / 2,
       templateY,
       templateWidth / 2,
-      that._globalData.colors[0],
+      that._globalData.getRandomColor(),
     );
 
     shape.name = 'inventory_circle';
@@ -20,7 +20,7 @@ export default function createInventory(that){
       templateY,
       templateWidth,
       templateWidth,
-      that._globalData.colors[1],
+      that._globalData.getRandomColor(),
     );
     
     shape.name = 'inventory_rectangle';
@@ -32,7 +32,7 @@ export default function createInventory(that){
       templateWidth / 2, 0,
       0, templateWidth,
       templateWidth, templateWidth,
-      that._globalData.colors[2],
+      that._globalData.getRandomColor(),
     );
     
     shape.name = 'inventory_triangle';
@@ -54,16 +54,17 @@ export default function createInventory(that){
         [polyX + hypotenuse, 0],
         [polyX, 0],
       ],
-      that._globalData.colors[3],
+      that._globalData.getRandomColor(),
     );
-    
+
     shape.name = 'inventory_hexagon';
   }
-  
-	var width = that.game.config.width;
-	var height = that._globalData.inventoryHeight;
+
+	const width = that.game.config.width;
+	const inventoryHeight = that._globalData.inventoryHeight();
+
 	var x = width / 2;
-	var y = that.game.config.height - height / 2;
+	var y = inventoryHeight / 2;
 
 	var gridWidth = width / 4;
 
@@ -71,31 +72,30 @@ export default function createInventory(that){
 		x,
 		y,
 		width,
-		height,
+		inventoryHeight,
 		0x333333,
 	);
-  
+
   rect.name = 'inventory';
 
 	for (var i = 1; i < 4; i++) {
 		var line = new Phaser.Geom.Line(
-				i * gridWidth, that.game.config.height - height, 
-				i * gridWidth, that.game.config.height
+      i * gridWidth, inventoryHeight, 
+      i * gridWidth, 0
 		);
 			
 		var graphics = that.add.graphics({
 			lineStyle: {
-				color: 0xffffff,
-				width: 2,
+				color: 0x000000,
+				width: 4,
 			}
 		});
 
 		graphics.strokeLineShape(line);
 	}
 
-	var templateColor = 0x555555;
 	var templateWidth = 50;
-	var templateY = that.game.config.height - height / 2;
+	var templateY = inventoryHeight / 2;
 
   addCircle();
   addRectangle();

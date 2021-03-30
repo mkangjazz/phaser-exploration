@@ -7,9 +7,9 @@ export default function rectangle(that){
   var shapeX = uniqueCoordinates.x;
   var shapeY = uniqueCoordinates.y;
 
-  var shapeColor = 0x9f00d0;
+  var shapeColor = that._globalData.getRandomColor();
 
-  var hypotenuse = that._globalData.shapeRadius;
+  var hypotenuse = that._globalData.shapeRadius() * .75;
   var polyY = Math.abs(hypotenuse * Math.sin(60 * Math.PI/180));
   var polyX = Math.abs(hypotenuse * Math.sin(30 * Math.PI/180));
 
@@ -84,6 +84,8 @@ export default function rectangle(that){
         shape.setVisible(false);
 
         inventory_hexagon.setActive(true);
+
+        that._globalData.setSolved(shape);
       }
     }
   });

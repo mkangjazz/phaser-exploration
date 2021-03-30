@@ -3,13 +3,15 @@ import Phaser from "phaser";
 import getRandomInt from '../../utility/getRandomInt';
 
 export default function rectangle(that){
-  var shapeLength = that._globalData.shapeRadius * 2;
+  var shapeLength = that._globalData.shapeRadius() * 1.25;
+
+  const inventoryHeight = that._globalData.inventoryHeight();
 
   var uniqueCoordinates = that._globalData.getUniqueShapeCoordinates();
   var shapeX = uniqueCoordinates.x;
   var shapeY = uniqueCoordinates.y;
 
-  var shapeColor = 0x9f00d0;
+  var shapeColor = that._globalData.getRandomColor();
 
   var shape = that.add.triangle(
     shapeX, shapeY,
@@ -53,6 +55,8 @@ export default function rectangle(that){
         shape.setVisible(false);
 
         inventory_triangle.setActive(true);
+
+        that._globalData.setSolved(shape);
       }
     }
   });
@@ -87,12 +91,12 @@ export default function rectangle(that){
         this.x = that.game.config.width - shapeLength / 2;
       }
 
-      if (this.y - shapeLength / 2 < 0) {
-        this.y = shapeLength / 2;
+      if (this.y - shapeLength / 2 < inventoryHeight) {
+        this.y = shapeLength / 2 + inventoryHeight;
       }
       
-      if (this.y + shapeLength / 2 > that.game.config.height - 75) {
-        this.y = that.game.config.height - 75 - shapeLength / 2;
+      if (this.y + shapeLength / 2 > that.game.config.height) {
+        this.y = that.game.config.height - shapeLength / 2;
       }
 
       if (

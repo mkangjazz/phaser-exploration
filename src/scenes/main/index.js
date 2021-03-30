@@ -8,13 +8,13 @@ import createRectangle from './createRectangle';
 import createTriangle from './createTriangle';
 import createHexagon from './createHexagon';
 
-var scene = new Phaser.Scene('Home');
+const scene = new Phaser.Scene('home');
 
 scene.preload = function(){
 };
 
 scene.create = function(){
-  createInventory(this);
+  const inventory = createInventory(this);
 
 	createCircle(this);
 
@@ -25,28 +25,46 @@ scene.create = function(){
   createHexagon(this);
 };
 
-scene.update = function(){	
+scene.update = function(){
 };
 
 scene._globalData = {
   colors: [
-    0xFFFFFF,
-    0xFF0000,
-    0xFFFF00,
-    0x0000FF,
+    0x8F00F2,
+    0x00CFFB,
+    0x5CFF00,
+    0xFDFB00,
+    0xFDAE32,
+    0xFF0C12,
   ],
-  shapeCoordinates: [],
+  getRandomColor: function() {
+    return this.colors[getRandomInt(0, this.colors.length)];
+  },
   getAnyColorExceptThisOne: function(color) {
     const filtered = this.colors.filter(hex => hex !== color);
     const returnValue = filtered[getRandomInt(0, filtered.length)];
-
+    
     return returnValue;
   },
-  shapeRadius: 40,
-  inventoryHeight: 75,
+  scene: scene,
+  solvedCount: 0,
+  setSolved: function(shape) {
+    this.solvedCount += 1;
+
+    if (this.solvedCount === 4) {
+      this.scene.scene.start('victory');
+    }
+  },
+  shapeCoordinates: [],
+  shapeRadius: () => {
+    return window.game.canvas.height * .10;
+  },
+  inventoryHeight: () => {
+    return 100;
+  },
   getUniqueShapeCoordinates: function() {
-    const shapeRadius = this.shapeRadius;
-    const inventoryHeight = this.inventoryHeight;
+    const shapeRadius = this.shapeRadius();
+    const inventoryHeight = this.inventoryHeight();
     const shapeCoordinates = this.shapeCoordinates;
 
     function doesCollide(o) {
@@ -77,8 +95,8 @@ scene._globalData = {
 
     function getRandomYinsideBounds() {
       return getRandomInt(
-        0 + shapeRadius, 
-        game.config.height  - inventoryHeight - shapeRadius
+        0 + inventoryHeight + shapeRadius, 
+        game.config.height - shapeRadius
       );
     }
 

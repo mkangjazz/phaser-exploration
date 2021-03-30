@@ -1,31 +1,28 @@
 import Phaser from "phaser";
-import logoImg from "./assets/logo.png";
 
 import sceneMain from './scenes/main/index.js';
+import sceneVictory from './scenes/victory/index.js';
 
 window.game = window.game || (function() {
   const config = {
-    backgroundColor: 0xcccccc,
-    height: 400,
-    type: Phaser.AUTO,
+    backgroundColor: 0x000000,
+    render: {
+      pixelArt: true
+    },
     parent: "app",
-    width: 600,
+    scale: {
+      height: window.innerHeight * window.devicePixelRatio,
+      mode: Phaser.Scale.NONE,
+      width: window.innerWidth * window.devicePixelRatio,
+      zoom: 1 / window.devicePixelRatio
+    },
     scene: [
       sceneMain,
+      sceneVictory,
     ],
-    title: 'Phaser Exploration MK',
+    title: 'Shapes',
+    type: Phaser.AUTO,
   };
-  
-//var defaultInputConfigurationObject = {
-//  hitArea: {},
-//  hitAreaCallback: function(){},
-//  draggable: false,
-//  dropZone: false,
-//  useHandCursor: false,
-//  cursor: '',
-//  pixelPerfect: false,
-//  alphaTolerance: 1,
-//}
 
   return new Phaser.Game(config);
 })();
