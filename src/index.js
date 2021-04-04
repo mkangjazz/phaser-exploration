@@ -1,3 +1,6 @@
+import main from "./css/main.css";
+import reset from "./css/reset.css";
+
 import Phaser from "phaser";
 
 import sceneMain from './scenes/main/index.js';

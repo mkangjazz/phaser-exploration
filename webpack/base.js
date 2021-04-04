@@ -16,6 +16,10 @@ module.exports = {
         }
       },
       {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader'
+      },
+      {
         test: [/\.vert$/, /\.frag$/],
         use: "raw-loader"
       },
